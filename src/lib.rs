@@ -95,6 +95,11 @@ pub trait IndexedStr:
     /// [`len`](`IndexedStr::len`) if the string contains multi-byte characters.
     fn byte_len(&self) -> usize;
 
+    /// Returns `true` if this [`IndexedStr`] is empty (of length 0).
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Returns the character at the given index, if it exists.
     fn char_at(&self, index: usize) -> Option<char>;
 
