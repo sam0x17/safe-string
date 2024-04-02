@@ -186,13 +186,16 @@ impl IndexedStr for IndexedString {
 
 impl IndexedString {
     /// Creates a new [`IndexedString`] from a `&str` or anything that implements [`AsRef<str>`].
-    pub fn from_str(s: impl AsRef<str>) -> Self {
-        let s = s.as_ref();
-        let chars: Vec<char> = s.chars().collect();
-        let offsets: Vec<usize> = s.char_indices().map(|(i, _)| i).collect();
+    pub fn from_str(s: impl Display) -> Self {
+        IndexedString::from_string(s.to_string())
+    }
+
+    /// Creates a new [`IndexedString`] from a [`String`], avoiding the need to clone the
+    /// string by taking ownership of it.
+    pub fn from_string(s: String) -> Self {
         IndexedString {
-            chars,
-            offsets,
+            chars: s.to_string().chars().collect(),
+            offsets: s.to_string().char_indices().map(|(i, _)| i).collect(),
             string: s.to_string(),
         }
     }
@@ -339,7 +342,7 @@ impl<'a> From<&'a IndexedString> for IndexedSlice<'a> {
 
 impl From<String> for IndexedString {
     fn from(s: String) -> Self {
-        IndexedString::from_str(&s)
+        IndexedString::from_string(s)
     }
 }
 
@@ -351,7 +354,7 @@ impl From<&str> for IndexedString {
 
 impl From<&String> for IndexedString {
     fn from(s: &String) -> Self {
-        IndexedString::from_str(s)
+        IndexedString::from_string(s.clone())
     }
 }
 
