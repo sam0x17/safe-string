@@ -340,6 +340,12 @@ impl<'a> From<&'a IndexedString> for IndexedSlice<'a> {
     }
 }
 
+impl<'a> From<IndexedSlice<'a>> for IndexedString {
+    fn from(s: IndexedSlice<'a>) -> Self {
+        s.to_indexed_string()
+    }
+}
+
 impl From<String> for IndexedString {
     fn from(s: String) -> Self {
         IndexedString::from_string(s)
