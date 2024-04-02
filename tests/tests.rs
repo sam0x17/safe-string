@@ -128,6 +128,7 @@ fn test_multibyte_character_boundaries() {
     let slice = indexed_string.slice(1..3); // Should include the entire "😊"
     assert_eq!(slice.as_str(), "😊b");
     assert_eq!(slice.len(), 2);
+    assert_eq!(indexed_string, indexed_string.as_slice());
 }
 
 #[test]

@@ -83,6 +83,9 @@ pub trait IndexedStr:
     /// a [`&str`](`str`).
     fn as_str(&self) -> &str;
 
+    /// Returns a [`IndexedSlice`] that represents the entire contents of this [`IndexedStr`].
+    fn as_slice(&self) -> IndexedSlice;
+
     /// Returns the length of this [`IndexedStr`] in characters, NOT bytes.
     fn len(&self) -> usize;
 
@@ -168,6 +171,14 @@ impl IndexedStr for IndexedString {
 
     fn to_indexed_string(&self) -> IndexedString {
         self.clone()
+    }
+
+    fn as_slice(&self) -> IndexedSlice {
+        IndexedSlice {
+            source: self,
+            start: 0,
+            end: self.chars.len(),
+        }
     }
 }
 
@@ -295,6 +306,10 @@ impl<'a> IndexedStr for IndexedSlice<'a> {
 
     fn to_indexed_string(&self) -> IndexedString {
         IndexedString::from_chars(self.chars().into_iter().copied())
+    }
+
+    fn as_slice(&self) -> IndexedSlice {
+        self.clone()
     }
 }
 
