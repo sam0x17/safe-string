@@ -5,3 +5,6 @@ edition = "2021"
 authors = ["sam0x17"]
 description = "Provides a safe interface for interacting with multi-byte strings in Rust, namely IndexedStr, IndexedString, and IndexedSlice"
 license = "MIT"
+repository = "https://github.com/sam0x17/safe-string"
+website = "https://sam0x17.dev"
+documentation = "https://docs.rs/safe-string"
