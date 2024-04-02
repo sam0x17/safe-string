@@ -21,6 +21,8 @@ overhead over that of a regular `&str` slice / fat pointer. In theory this could
 down to the same size as a fat pointer using unsafe rust, but this way we get to have
 completely safe code and the difference is negligible.
 
+## Examples
+
 ```rust
 use safe_string::{IndexedString, IndexedStr, IndexedSlice};
 
