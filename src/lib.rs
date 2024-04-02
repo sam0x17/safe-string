@@ -55,6 +55,8 @@
 //! assert_eq!(standard_str_slice, "Hello");
 //! ```
 
+#![deny(missing_docs)]
+
 use core::fmt::{Debug, Display};
 use core::ops::{Bound, Index, RangeBounds};
 
