@@ -5,7 +5,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/sam0x17/safe-string/ci.yaml)](https://github.com/sam0x17/safe-string/actions/workflows/ci.yaml?query=branch%3Amain)
 [![MIT License](https://img.shields.io/github/license/sam0x17/safe-string)](https://github.com/sam0x17/safe-string/blob/main/LICENSE)
 
-This crate provides replacement types for `String` and `&str`(`str`) that allow for safe
+This crate provides replacement types for `String` and `&str` that allow for safe
 indexing by character to avoid panics and the usual pitfalls of working with multi-byte UTF-8
 characters, namely the scenario where the _byte length_ of a string and the _character length_
 of that same string are not the same.
