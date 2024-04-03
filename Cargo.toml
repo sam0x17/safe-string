@@ -1,6 +1,6 @@
 [package]
 name = "safe-string"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2021"
 authors = ["sam0x17"]
 description = "Provides a safe interface for interacting with multi-byte strings in Rust, namely IndexedStr, IndexedString, and IndexedSlice"
