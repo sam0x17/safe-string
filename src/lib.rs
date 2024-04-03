@@ -59,6 +59,7 @@
 
 use core::fmt::{Debug, Display};
 use core::ops::{Bound, RangeBounds};
+use core::str::FromStr;
 
 /// A trait that facilitates safe interaction with strings that contain multi-byte characters.
 ///
@@ -133,6 +134,14 @@ pub trait IndexedStr:
     /// Returns `true` if this [`IndexedStr`] ends with the given string.
     fn ends_with<S: AsRef<str>>(&self, s: S) -> bool {
         self.as_str().ends_with(s.as_ref())
+    }
+
+    /// Parses this [`IndexedStr`] into a value of type `F` using the [`FromStr`] trait.
+    fn parse<F>(&self) -> Result<F, <F as FromStr>::Err>
+    where
+        F: FromStr,
+    {
+        self.as_str().parse()
     }
 }
 
