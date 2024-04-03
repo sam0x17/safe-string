@@ -19,7 +19,7 @@ fn test_from_chars() {
 #[test]
 fn test_indexing() {
     let indexed_string = IndexedString::from_str("h₳ello");
-    assert_eq!(indexed_string[0], 'h');
+    assert_eq!(indexed_string.char_at(0).unwrap(), 'h');
     assert_eq!(indexed_string.slice(1..4).as_str(), "₳el");
     assert_eq!(indexed_string.slice(4..), "lo");
 }
@@ -34,7 +34,7 @@ fn test_empty_string() {
 #[test]
 fn test_single_character() {
     let indexed_string: IndexedString = String::from("a").into();
-    assert_eq!(indexed_string[0], 'a');
+    assert_eq!(indexed_string.char_at(0).unwrap(), 'a');
     assert_eq!(indexed_string.as_str(), "a");
     assert_eq!(indexed_string.len(), 1);
 }
@@ -42,8 +42,8 @@ fn test_single_character() {
 #[test]
 fn test_multibyte_characters() {
     let indexed_string: IndexedString = "😊🌍".into();
-    assert_eq!(indexed_string[0], '😊');
-    assert_eq!(indexed_string[1], '🌍');
+    assert_eq!(indexed_string.char_at(0).unwrap(), '😊');
+    assert_eq!(indexed_string.char_at(1).unwrap(), '🌍');
     assert_eq!(indexed_string.slice(0..1), "😊");
     assert_eq!(indexed_string.len(), 2);
 }

@@ -58,7 +58,7 @@
 #![deny(missing_docs)]
 
 use core::fmt::{Debug, Display};
-use core::ops::{Bound, Index, RangeBounds};
+use core::ops::{Bound, RangeBounds};
 
 /// A trait that facilitates safe interaction with strings that contain multi-byte characters.
 ///
@@ -76,7 +76,7 @@ use core::ops::{Bound, Index, RangeBounds};
 /// It is also worth noting that all of these types will never panic when indexing or slicing,
 /// unlike [`&str`](`str`) and [`String`], and clamped bounds are used instead.
 pub trait IndexedStr:
-    Display + Debug + PartialEq<IndexedString> + for<'a> PartialEq<IndexedSlice<'a>> + Index<usize>
+    Display + Debug + PartialEq<IndexedString> + for<'a> PartialEq<IndexedSlice<'a>>
 {
     /// Returns a [`&str`](`str`) representation of this [`IndexedStr`].
     ///
@@ -244,14 +244,6 @@ impl AsRef<str> for IndexedString {
     }
 }
 
-impl Index<usize> for IndexedString {
-    type Output = char;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.chars[index]
-    }
-}
-
 impl Display for IndexedString {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.string)
@@ -395,10 +387,94 @@ impl<'a> Display for IndexedSlice<'a> {
     }
 }
 
-impl Index<usize> for IndexedSlice<'_> {
-    type Output = char;
+impl IndexedStr for &IndexedString {
+    fn as_str(&self) -> &str {
+        (*self).as_str()
+    }
 
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.source.chars[self.start + index]
+    fn as_slice(&self) -> IndexedSlice {
+        (*self).as_slice()
+    }
+
+    fn len(&self) -> usize {
+        (*self).len()
+    }
+
+    fn byte_len(&self) -> usize {
+        (*self).byte_len()
+    }
+
+    fn char_at(&self, index: usize) -> Option<char> {
+        (*self).char_at(index)
+    }
+
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+        (*self).slice(range)
+    }
+
+    fn chars(&self) -> &[char] {
+        (*self).chars()
+    }
+
+    fn to_indexed_string(&self) -> IndexedString {
+        (*self).to_indexed_string()
+    }
+}
+
+impl PartialEq<IndexedString> for &IndexedString {
+    fn eq(&self, other: &IndexedString) -> bool {
+        self.as_str() == other.as_str()
+    }
+}
+
+impl PartialEq<IndexedSlice<'_>> for &IndexedString {
+    fn eq(&self, other: &IndexedSlice) -> bool {
+        self.as_str() == other.as_str()
+    }
+}
+
+impl<'a> IndexedStr for &IndexedSlice<'a> {
+    fn as_str(&self) -> &str {
+        (*self).as_str()
+    }
+
+    fn as_slice(&self) -> IndexedSlice {
+        (*self).as_slice()
+    }
+
+    fn len(&self) -> usize {
+        (*self).len()
+    }
+
+    fn byte_len(&self) -> usize {
+        (*self).byte_len()
+    }
+
+    fn char_at(&self, index: usize) -> Option<char> {
+        (*self).char_at(index)
+    }
+
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+        (*self).slice(range)
+    }
+
+    fn chars(&self) -> &[char] {
+        (*self).chars()
+    }
+
+    fn to_indexed_string(&self) -> IndexedString {
+        (*self).to_indexed_string()
+    }
+}
+
+impl<'a> PartialEq<IndexedString> for &IndexedSlice<'a> {
+    fn eq(&self, other: &IndexedString) -> bool {
+        self.as_str() == other.as_str()
+    }
+}
+
+impl<'a> PartialEq<IndexedSlice<'_>> for &IndexedSlice<'a> {
+    fn eq(&self, other: &IndexedSlice) -> bool {
+        self.as_str() == other.as_str()
     }
 }
