@@ -114,6 +114,16 @@ pub trait IndexedStr:
 
     /// Converts this [`IndexedStr`] into an owned, dynamically allocated [`IndexedString`].
     fn to_indexed_string(&self) -> IndexedString;
+
+    /// Returns a new [`IndexedStr`] that is the lowercase version of this [`IndexedStr`].
+    fn to_lowercase(&self) -> IndexedString {
+        self.as_str().to_lowercase().into()
+    }
+
+    /// Returns a new [`IndexedStr`] that is the uppercase version of this [`IndexedStr`].
+    fn to_uppercase(&self) -> IndexedString {
+        self.as_str().to_uppercase().into()
+    }
 }
 
 /// A [`String`] replacement that allows for safe indexing and slicing of multi-byte characters.
