@@ -478,3 +478,27 @@ impl<'a> PartialEq<IndexedSlice<'_>> for &IndexedSlice<'a> {
         self.as_str() == other.as_str()
     }
 }
+
+impl<'a> PartialEq<IndexedSlice<'a>> for &str {
+    fn eq(&self, other: &IndexedSlice) -> bool {
+        other.as_str() == *self
+    }
+}
+
+impl<'a> PartialEq<IndexedSlice<'a>> for String {
+    fn eq(&self, other: &IndexedSlice) -> bool {
+        other.as_str() == *self
+    }
+}
+
+impl PartialEq<IndexedString> for &str {
+    fn eq(&self, other: &IndexedString) -> bool {
+        other.as_str() == *self
+    }
+}
+
+impl PartialEq<IndexedString> for String {
+    fn eq(&self, other: &IndexedString) -> bool {
+        other.as_str() == *self
+    }
+}
