@@ -124,6 +124,16 @@ pub trait IndexedStr:
     fn to_uppercase(&self) -> IndexedString {
         self.as_str().to_uppercase().into()
     }
+
+    /// Returns `true` if this [`IndexedStr`] starts with the given string.
+    fn starts_with<S: AsRef<str>>(&self, s: S) -> bool {
+        self.as_str().starts_with(s.as_ref())
+    }
+
+    /// Returns `true` if this [`IndexedStr`] ends with the given string.
+    fn ends_with<S: AsRef<str>>(&self, s: S) -> bool {
+        self.as_str().ends_with(s.as_ref())
+    }
 }
 
 /// A [`String`] replacement that allows for safe indexing and slicing of multi-byte characters.

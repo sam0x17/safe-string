@@ -197,3 +197,14 @@ fn test_slicing_each_character() {
         assert!(slice.to_indexed_string().len() == 1);
     }
 }
+
+#[test]
+fn test_starts_and_ends_with() {
+    let indexed_string = IndexedString::from_str("hello world");
+    assert!(indexed_string.starts_with("hello"));
+    assert!(indexed_string.ends_with("world"));
+    assert!(!indexed_string.starts_with("world"));
+    assert!(!indexed_string.ends_with("hello"));
+    assert!(indexed_string.starts_with(IndexedString::from("hello")));
+    assert!(indexed_string.ends_with(IndexedString::from("world")));
+}
