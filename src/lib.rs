@@ -219,7 +219,7 @@ impl IndexedStr for IndexedString {
 }
 
 impl IndexedString {
-    /// Creates a new [`IndexedString`] from a `&str` or anything that implements [`AsRef<str>`].
+    /// Creates a new [`IndexedString`] from a `&str` or anything that implements [`Display`].
     pub fn from_str(s: impl Display) -> Self {
         IndexedString::from_string(s.to_string())
     }
@@ -228,9 +228,9 @@ impl IndexedString {
     /// string by taking ownership of it.
     pub fn from_string(s: String) -> Self {
         IndexedString {
-            chars: s.to_string().chars().collect(),
-            offsets: s.to_string().char_indices().map(|(i, _)| i).collect(),
-            string: s.to_string(),
+            chars: s.chars().collect(),
+            offsets: s.char_indices().map(|(i, _)| i).collect(),
+            string: s,
         }
     }
 
