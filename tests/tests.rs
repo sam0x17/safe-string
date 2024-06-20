@@ -208,3 +208,18 @@ fn test_starts_and_ends_with() {
     assert!(indexed_string.starts_with(IndexedString::from("hello")));
     assert!(indexed_string.ends_with(IndexedString::from("world")));
 }
+
+#[test]
+fn test_slice_with_empty_start() {
+    let indexed_string = IndexedString::from_str("hello");
+    let slice = indexed_string.slice(..); // Equivalent to 0..len
+    assert_eq!(slice.as_str(), "hello");
+}
+
+#[test]
+fn test_empty_string_conversion() {
+    let indexed_string: IndexedString = "".into();
+    let slice = indexed_string.slice(..);
+    assert_eq!(slice.as_str(), "");
+    assert_eq!(slice.len(), 0);
+}

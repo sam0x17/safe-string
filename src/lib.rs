@@ -237,7 +237,14 @@ impl IndexedString {
     /// Creates a new [`IndexedString`] from an iterator of [`char`]s.
     pub fn from_chars(chars: impl Iterator<Item = char>) -> Self {
         let chars: Vec<char> = chars.collect();
-        let offsets: Vec<usize> = chars.iter().enumerate().map(|(i, _)| i).collect();
+        let offsets: Vec<usize> = chars
+            .iter()
+            .scan(0, |acc, &c| {
+                let offset = *acc;
+                *acc += c.len_utf8();
+                Some(offset)
+            })
+            .collect();
         let string: String = chars.iter().collect();
         IndexedString {
             chars,
