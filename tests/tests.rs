@@ -223,3 +223,39 @@ fn test_empty_string_conversion() {
     assert_eq!(slice.as_str(), "");
     assert_eq!(slice.len(), 0);
 }
+
+#[test]
+fn test_from_chars_with_multibyte_characters() {
+    let chars = vec!['a', '😊', 'b', '🌍', 'c'];
+    let indexed_string = IndexedString::from_chars(chars.into_iter());
+
+    // Verify the original string
+    assert_eq!(indexed_string.as_str(), "a😊b🌍c");
+
+    // Verify character indexing
+    assert_eq!(indexed_string.char_at(0), Some('a'));
+    assert_eq!(indexed_string.char_at(1), Some('😊'));
+    assert_eq!(indexed_string.char_at(2), Some('b'));
+    assert_eq!(indexed_string.char_at(3), Some('🌍'));
+    assert_eq!(indexed_string.char_at(4), Some('c'));
+    assert_eq!(indexed_string.char_at(5), None); // Out of bounds
+
+    // Verify slicing
+    assert_eq!(indexed_string.slice(0..1).as_str(), "a");
+    assert_eq!(indexed_string.slice(1..2).as_str(), "😊");
+    assert_eq!(indexed_string.slice(2..3).as_str(), "b");
+    assert_eq!(indexed_string.slice(3..4).as_str(), "🌍");
+    assert_eq!(indexed_string.slice(4..5).as_str(), "c");
+
+    // Verify full slice
+    assert_eq!(indexed_string.slice(0..5).as_str(), "a😊b🌍c");
+
+    // Verify partial slice
+    assert_eq!(indexed_string.slice(1..4).as_str(), "😊b🌍");
+
+    // Verify empty slice
+    assert_eq!(indexed_string.slice(2..2).as_str(), "");
+
+    // Verify slice out of bounds
+    assert_eq!(indexed_string.slice(5..10).as_str(), "");
+}
