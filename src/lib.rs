@@ -143,6 +143,9 @@ pub trait IndexedStr:
     {
         self.as_str().parse()
     }
+
+    /// Returns an iterator over the lines of this [`IndexedStr`].
+    fn lines(&self) -> IndexedLines;
 }
 
 /// A [`String`] replacement that allows for safe indexing and slicing of multi-byte characters.
@@ -214,6 +217,13 @@ impl IndexedStr for IndexedString {
             source: self,
             start: 0,
             end: self.chars.len(),
+        }
+    }
+
+    fn lines(&self) -> IndexedLines {
+        IndexedLines {
+            source: self,
+            start: 0,
         }
     }
 }
@@ -349,6 +359,13 @@ impl<'a> IndexedStr for IndexedSlice<'a> {
     fn as_slice(&self) -> IndexedSlice {
         self.clone()
     }
+
+    fn lines(&self) -> IndexedLines {
+        IndexedLines {
+            source: self.source,
+            start: self.start,
+        }
+    }
 }
 
 impl<'a, S: AsRef<str>> PartialEq<S> for IndexedSlice<'a> {
@@ -435,6 +452,10 @@ impl IndexedStr for &IndexedString {
     fn to_indexed_string(&self) -> IndexedString {
         (*self).to_indexed_string()
     }
+
+    fn lines(&self) -> IndexedLines {
+        (*self).lines()
+    }
 }
 
 impl PartialEq<IndexedString> for &IndexedString {
@@ -481,6 +502,10 @@ impl<'a> IndexedStr for &IndexedSlice<'a> {
     fn to_indexed_string(&self) -> IndexedString {
         (*self).to_indexed_string()
     }
+
+    fn lines(&self) -> IndexedLines {
+        (*self).lines()
+    }
 }
 
 impl<'a> PartialEq<IndexedString> for &IndexedSlice<'a> {
@@ -516,5 +541,44 @@ impl PartialEq<IndexedString> for &str {
 impl PartialEq<IndexedString> for String {
     fn eq(&self, other: &IndexedString) -> bool {
         other.as_str() == *self
+    }
+}
+
+/// An iterator over the lines of an [`IndexedStr`].
+pub struct IndexedLines<'a> {
+    source: &'a IndexedString,
+    start: usize,
+}
+
+impl<'a> Iterator for IndexedLines<'a> {
+    type Item = IndexedSlice<'a>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.start > self.source.chars.len() {
+            return None;
+        }
+
+        if self.start == self.source.chars.len() {
+            self.start += 1; // Mark as finished
+            return Some(self.source.slice(self.start - 1..self.start - 1));
+        }
+
+        let mut end = self.start;
+        while end < self.source.chars.len() {
+            if self.source.chars[end] == '\n' {
+                let line = self.source.slice(self.start..end);
+                self.start = end + 1; // Skip the newline character
+                return Some(line);
+            }
+            end += 1;
+        }
+
+        if self.start <= self.source.chars.len() {
+            let line = self.source.slice(self.start..self.source.chars.len());
+            self.start = self.source.chars.len() + 1; // Mark as finished
+            return Some(line);
+        }
+
+        None
     }
 }

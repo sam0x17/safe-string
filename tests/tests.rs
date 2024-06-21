@@ -259,3 +259,63 @@ fn test_from_chars_with_multibyte_characters() {
     // Verify slice out of bounds
     assert_eq!(indexed_string.slice(5..10).as_str(), "");
 }
+
+#[test]
+fn test_lines_single_line() {
+    let indexed_string = IndexedString::from_str("Hello, world!");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 1);
+    assert_eq!(lines[0].as_str(), "Hello, world!");
+}
+
+#[test]
+fn test_lines_multiple_lines() {
+    let indexed_string = IndexedString::from_str("Hello, world!\nHow are you?\nI am fine.");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 3);
+    assert_eq!(lines[0].as_str(), "Hello, world!");
+    assert_eq!(lines[1].as_str(), "How are you?");
+    assert_eq!(lines[2].as_str(), "I am fine.");
+}
+
+#[test]
+fn test_lines_with_empty_lines() {
+    let indexed_string = IndexedString::from_str("Hello, world!\n\nHow are you?\n\nI am fine.\n");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 6);
+    assert_eq!(lines[0].as_str(), "Hello, world!");
+    assert_eq!(lines[1].as_str(), "");
+    assert_eq!(lines[2].as_str(), "How are you?");
+    assert_eq!(lines[3].as_str(), "");
+    assert_eq!(lines[4].as_str(), "I am fine.");
+    assert_eq!(lines[5].as_str(), "");
+}
+
+#[test]
+fn test_lines_only_newlines() {
+    let indexed_string = IndexedString::from_str("\n\n\n");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 4);
+    assert_eq!(lines[0].as_str(), "");
+    assert_eq!(lines[1].as_str(), "");
+    assert_eq!(lines[2].as_str(), "");
+    assert_eq!(lines[3].as_str(), "");
+}
+
+#[test]
+fn test_lines_empty_string() {
+    let indexed_string = IndexedString::from_str("");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 1);
+    assert_eq!(lines[0].as_str(), "");
+}
+
+#[test]
+fn test_lines_multibyte_characters() {
+    let indexed_string = IndexedString::from_str("Hello, 世界!\nこんにちは世界!\n👋😊");
+    let lines: Vec<_> = indexed_string.lines().collect();
+    assert_eq!(lines.len(), 3);
+    assert_eq!(lines[0].as_str(), "Hello, 世界!");
+    assert_eq!(lines[1].as_str(), "こんにちは世界!");
+    assert_eq!(lines[2].as_str(), "👋😊");
+}
