@@ -292,7 +292,7 @@ pub struct IndexedSlice<'a> {
     end: usize,
 }
 
-impl<'a> IndexedStr for IndexedSlice<'a> {
+impl IndexedStr for IndexedSlice<'_> {
     fn as_str(&self) -> &str {
         if self.start >= self.source.offsets.len()
             || self.end > self.source.offsets.len()
@@ -353,7 +353,7 @@ impl<'a> IndexedStr for IndexedSlice<'a> {
     }
 
     fn to_indexed_string(&self) -> IndexedString {
-        IndexedString::from_chars(self.chars().into_iter().copied())
+        IndexedString::from_chars(self.chars().iter().copied())
     }
 
     fn as_slice(&self) -> IndexedSlice {
@@ -368,13 +368,13 @@ impl<'a> IndexedStr for IndexedSlice<'a> {
     }
 }
 
-impl<'a, S: AsRef<str>> PartialEq<S> for IndexedSlice<'a> {
+impl<S: AsRef<str>> PartialEq<S> for IndexedSlice<'_> {
     fn eq(&self, other: &S) -> bool {
         self.as_str() == other.as_ref()
     }
 }
 
-impl<'a> AsRef<str> for IndexedSlice<'a> {
+impl AsRef<str> for IndexedSlice<'_> {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -414,7 +414,7 @@ impl From<&String> for IndexedString {
     }
 }
 
-impl<'a> Display for IndexedSlice<'a> {
+impl Display for IndexedSlice<'_> {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.as_str())
     }
@@ -470,7 +470,7 @@ impl PartialEq<IndexedSlice<'_>> for &IndexedString {
     }
 }
 
-impl<'a> IndexedStr for &IndexedSlice<'a> {
+impl IndexedStr for &IndexedSlice<'_> {
     fn as_str(&self) -> &str {
         (*self).as_str()
     }
@@ -508,25 +508,25 @@ impl<'a> IndexedStr for &IndexedSlice<'a> {
     }
 }
 
-impl<'a> PartialEq<IndexedString> for &IndexedSlice<'a> {
+impl PartialEq<IndexedString> for &IndexedSlice<'_> {
     fn eq(&self, other: &IndexedString) -> bool {
         self.as_str() == other.as_str()
     }
 }
 
-impl<'a> PartialEq<IndexedSlice<'_>> for &IndexedSlice<'a> {
+impl PartialEq<IndexedSlice<'_>> for &IndexedSlice<'_> {
     fn eq(&self, other: &IndexedSlice) -> bool {
         self.as_str() == other.as_str()
     }
 }
 
-impl<'a> PartialEq<IndexedSlice<'a>> for &str {
+impl PartialEq<IndexedSlice<'_>> for &str {
     fn eq(&self, other: &IndexedSlice) -> bool {
         other.as_str() == *self
     }
 }
 
-impl<'a> PartialEq<IndexedSlice<'a>> for String {
+impl PartialEq<IndexedSlice<'_>> for String {
     fn eq(&self, other: &IndexedSlice) -> bool {
         other.as_str() == *self
     }
