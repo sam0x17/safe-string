@@ -54,6 +54,7 @@ fn test_out_of_bounds_indexing() {
     assert!(indexed_string.char_at(10).is_none());
 }
 
+#[allow(clippy::reversed_empty_ranges)]
 #[test]
 fn test_reverse_range() {
     let indexed_string = IndexedString::from_str("hello");
