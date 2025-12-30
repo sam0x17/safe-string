@@ -1,4 +1,6 @@
+#![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::should_implement_trait)]
+#![deny(missing_docs)]
 //! This crate provides replacement types for [`String`] and [`&str`](`str`) that allow for safe
 //! indexing by character to avoid panics and the usual pitfalls of working with multi-byte
 //! UTF-8 characters, namely the scenario where the _byte length_ of a string and the
@@ -56,11 +58,20 @@
 //! assert_eq!(standard_str_slice, "Hello");
 //! ```
 
-#![deny(missing_docs)]
+#[cfg(not(feature = "std"))]
+extern crate alloc;
 
+#[cfg(not(feature = "std"))]
+use alloc::string::{String, ToString};
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
 use core::fmt::{Debug, Display};
 use core::ops::{Bound, RangeBounds};
 use core::str::FromStr;
+#[cfg(feature = "std")]
+use std::string::{String, ToString};
+#[cfg(feature = "std")]
+use std::vec::Vec;
 
 /// A trait that facilitates safe interaction with strings that contain multi-byte characters.
 ///

@@ -8,3 +8,7 @@ license = "MIT"
 repository = "https://github.com/sam0x17/safe-string"
 homepage = "https://sam0x17.dev"
 documentation = "https://docs.rs/safe-string"
+
+[features]
+default = ["std"]
+std = []

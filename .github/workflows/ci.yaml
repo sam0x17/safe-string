@@ -35,3 +35,13 @@ jobs:
         run: curl https://sh.rustup.rs -sSf | sh -s -- -y
       - name: cargo doc
         run: cargo doc --workspace --all-features
+  cargo-check-no-std:
+    name: cargo check (no_std)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Rust Toolchain
+        run: curl https://sh.rustup.rs -sSf | sh -s -- -y
+      - name: cargo check (no default features)
+        run: cargo check --workspace --no-default-features --lib

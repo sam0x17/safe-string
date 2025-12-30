@@ -60,3 +60,11 @@ let slice = message.slice(0..5);
 let standard_str_slice = slice.as_str();
 assert_eq!(standard_str_slice, "Hello");
 ```
+
+## no_std
+
+The crate supports `no_std` plus `alloc`. Disable default features to drop the `std` dependency:
+
+```toml
+safe-string = { version = "0.2.0", default-features = false }
+```
