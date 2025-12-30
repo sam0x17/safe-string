@@ -87,7 +87,7 @@ pub trait IndexedStr:
     fn as_str(&self) -> &str;
 
     /// Returns a [`IndexedSlice`] that represents the entire contents of this [`IndexedStr`].
-    fn as_slice(&self) -> IndexedSlice;
+    fn as_slice(&self) -> IndexedSlice<'_>;
 
     /// Returns the length of this [`IndexedStr`] in characters, NOT bytes.
     fn len(&self) -> usize;
@@ -108,7 +108,7 @@ pub trait IndexedStr:
     /// _characters_ in the string, not bytes.
     ///
     /// The range is automatically clamped to the bounds of the [`IndexedStr`].
-    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice;
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice<'_>;
 
     /// Returns a slice containing all characters of this [`IndexedStr`] in order.
     fn chars(&self) -> &[char];
@@ -145,7 +145,7 @@ pub trait IndexedStr:
     }
 
     /// Returns an iterator over the lines of this [`IndexedStr`].
-    fn lines(&self) -> IndexedLines;
+    fn lines(&self) -> IndexedLines<'_>;
 }
 
 /// A [`String`] replacement that allows for safe indexing and slicing of multi-byte characters.
@@ -179,7 +179,7 @@ impl IndexedStr for IndexedString {
         self.string.len()
     }
 
-    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice<'_> {
         let start = match range.start_bound() {
             Bound::Included(&start) => start,
             Bound::Excluded(&start) => start + 1,
@@ -212,7 +212,7 @@ impl IndexedStr for IndexedString {
         self.clone()
     }
 
-    fn as_slice(&self) -> IndexedSlice {
+    fn as_slice(&self) -> IndexedSlice<'_> {
         IndexedSlice {
             source: self,
             start: 0,
@@ -220,7 +220,7 @@ impl IndexedStr for IndexedString {
         }
     }
 
-    fn lines(&self) -> IndexedLines {
+    fn lines(&self) -> IndexedLines<'_> {
         IndexedLines {
             source: self,
             start: 0,
@@ -323,7 +323,7 @@ impl IndexedStr for IndexedSlice<'_> {
         self.source.char_at(self.start + index)
     }
 
-    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice<'_> {
         let start = match range.start_bound() {
             Bound::Included(&start) => start,
             Bound::Excluded(&start) => start + 1,
@@ -356,11 +356,11 @@ impl IndexedStr for IndexedSlice<'_> {
         IndexedString::from_chars(self.chars().iter().copied())
     }
 
-    fn as_slice(&self) -> IndexedSlice {
+    fn as_slice(&self) -> IndexedSlice<'_> {
         self.clone()
     }
 
-    fn lines(&self) -> IndexedLines {
+    fn lines(&self) -> IndexedLines<'_> {
         IndexedLines {
             source: self.source,
             start: self.start,
@@ -425,7 +425,7 @@ impl IndexedStr for &IndexedString {
         (*self).as_str()
     }
 
-    fn as_slice(&self) -> IndexedSlice {
+    fn as_slice(&self) -> IndexedSlice<'_> {
         (*self).as_slice()
     }
 
@@ -441,7 +441,7 @@ impl IndexedStr for &IndexedString {
         (*self).char_at(index)
     }
 
-    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice<'_> {
         (*self).slice(range)
     }
 
@@ -453,7 +453,7 @@ impl IndexedStr for &IndexedString {
         (*self).to_indexed_string()
     }
 
-    fn lines(&self) -> IndexedLines {
+    fn lines(&self) -> IndexedLines<'_> {
         (*self).lines()
     }
 }
@@ -475,7 +475,7 @@ impl IndexedStr for &IndexedSlice<'_> {
         (*self).as_str()
     }
 
-    fn as_slice(&self) -> IndexedSlice {
+    fn as_slice(&self) -> IndexedSlice<'_> {
         (*self).as_slice()
     }
 
@@ -491,7 +491,7 @@ impl IndexedStr for &IndexedSlice<'_> {
         (*self).char_at(index)
     }
 
-    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice {
+    fn slice<R: RangeBounds<usize>>(&self, range: R) -> IndexedSlice<'_> {
         (*self).slice(range)
     }
 
@@ -503,7 +503,7 @@ impl IndexedStr for &IndexedSlice<'_> {
         (*self).to_indexed_string()
     }
 
-    fn lines(&self) -> IndexedLines {
+    fn lines(&self) -> IndexedLines<'_> {
         (*self).lines()
     }
 }
